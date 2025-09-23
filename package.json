@@ -1,20 +1,24 @@
 {
-  "name": "cabinet-site",
+  "name": "us-cabinet-portal",
   "version": "1.0.0",
-  "description": "US Cabinet Members Directory with Authentication",
-  "main": "src/App.js",
+  "description": "US Cabinet Members Directory with Simulated Authentication",
+  "homepage": "https://yourusername.github.io/us-cabinet-portal",
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1",
-    "appwrite": "^13.0.0",
-    "react-router-dom": "^6.8.1"
+    "react-router-dom": "^6.8.1",
+    "react-scripts": "5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
+  },
+  "devDependencies": {
+    "gh-pages": "^4.0.0"
   },
   "eslintConfig": {
     "extends": [
