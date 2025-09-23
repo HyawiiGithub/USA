@@ -1,40 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { Account } from 'appwrite';
-import { client } from './appwriteConfig';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import LoadingSpinner from './components/LoadingSpinner';
 import './index.css';
 
-const account = new Account(client);
+// Mock authentication - localStorage based for GitHub Pages compatibility
+const AUTH_KEY = 'cabinet_auth';
 
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const checkAuth = async () => {
+    // Check if user was previously logged in
+    const savedUser = localStorage.getItem(AUTH_KEY);
+    if (savedUser) {
       try {
-        const userData = await account.get();
+        const userData = JSON.parse(savedUser);
         setUser(userData);
       } catch (error) {
-        setUser(null);
-      } finally {
-        setLoading(false);
+        localStorage.removeItem(AUTH_KEY);
       }
-    };
-
-    checkAuth();
+    }
+    setLoading(false);
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      await account.deleteSession('current');
-      setUser(null);
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
+  const handleLogin = (userData) => {
+    setUser(userData);
+    localStorage.setItem(AUTH_KEY, JSON.stringify(userData));
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    localStorage.removeItem(AUTH_KEY);
   };
 
   if (loading) {
@@ -42,12 +41,12 @@ function App() {
   }
 
   return (
-    <Router>
+    <Router basename="/us-cabinet-portal">
       <div className="min-h-screen bg-background text-foreground">
         <Routes>
           <Route 
             path="/login" 
-            element={user ? <Navigate to="/dashboard" /> : <Login setUser={setUser} />} 
+            element={user ? <Navigate to="/dashboard" /> : <Login onLogin={handleLogin} />} 
           />
           <Route 
             path="/dashboard" 
