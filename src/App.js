@@ -41,7 +41,7 @@ function App() {
   }
 
   return (
-    <Router basename="/us-cabinet-portal">
+    <Router basename={process.env.PUBLIC_URL}>
       <div className="min-h-screen bg-background text-foreground">
         <Routes>
           <Route 
